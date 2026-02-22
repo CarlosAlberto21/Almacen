@@ -1,0 +1,33 @@
+   ------------------------------------------------//----------------------------------------------------------------------------------
+
+   --Capa DTO: SE encarga de los datos que el cliente recibe y envia que luego la capa service hace las operaciones logicas con esos datos.
+   --Capa Entity: Es la encargada de abstraer todos los datos que la base de datos posee.
+   --Capa Repository: Es la que se encarga de hacer las operaciones sql como las CRUD o puedes crear en esa capa cualquier otra operacion.
+   --Capa Service: Es la encargada de hacer toda la operacion logica del sistema.
+   --Capa Controllers: Es el puente entre el service o Api con el cliente (App moviel, website, etc...) en este caso opera todas las operaciones Http que recibe el sistema.
+   --Capa Config: Se encarga de la seguridad del system en este caso trabajando con jwt, trabajando con la generacion, validacion de tokens y usando un filtro para cada
+   una de las peticciones Htpp
+
+---------------------------------------------//--------------------------------------------------------------------------------------
+
+// Relación con Orders: un cliente puede tener muchos pedidos clase customer
+@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+private List<Orders> orders;
+
+// Relación con el cliente clase orders
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "customer_id", nullable = false)
+private Customers customer;
+
+--Aqui estoy diciedo que un cliente puede tener 3 pedidos, y esos 3 pedidos pertenecen a un usuario
+--@JOIN COLUMN  indica cual es el campo que contiene mi foreing key en mi tabla que hace relacion a la llave primaria de la otra tabla
+
+----------------------------------------------------//-------------------------------------------------------------------------------
+   //fetch le indica que cada que cargue un usuario, cargue sus rol
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles", // Nombre de tu tabla de relación
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+
